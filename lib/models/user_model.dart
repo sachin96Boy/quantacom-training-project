@@ -1,6 +1,7 @@
 enum UserRole { user, admin }
 
 class UserModel {
+  final String userId;
   final String userEmail;
   final String userName;
   final String password;
@@ -10,5 +11,6 @@ class UserModel {
       {required this.userEmail,
       required this.userName,
       required this.password,
+      required this.userId,
       this.userRole = UserRole.user});
 }
