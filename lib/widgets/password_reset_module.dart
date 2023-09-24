@@ -69,9 +69,12 @@ class _PasswordResetModuleState extends State<PasswordResetModule> {
                     return null;
                   },
                 ),
-                ElevatedButton(
-                    onPressed: _handlePasswordResetSubmit,
-                    child: const Text("Submit"))
+                Container(
+                  margin: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                      onPressed: _handlePasswordResetSubmit,
+                      child: const Text("Submit")),
+                )
               ],
             ),
           )

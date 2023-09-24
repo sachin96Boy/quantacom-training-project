@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 
-class UserCreationModule extends StatefulWidget {
-  const UserCreationModule({super.key});
+class SignInModule extends StatefulWidget {
+  const SignInModule({super.key});
 
   @override
-  State<UserCreationModule> createState() => _UserCreationModuleState();
+  State<SignInModule> createState() => _SignInModuleState();
 }
 
-class _UserCreationModuleState extends State<UserCreationModule> {
+class _SignInModuleState extends State<SignInModule> {
   final _formKey = GlobalKey<FormState>();
+  var initialValues = {"userEmail": "", "password": ""};
 
-  var initialValues = {"userEmail": "", "userName": "", "password": ""};
-
-  void _handleSubmitUser() {
+  void _handleLogin() {
     final isValid = _formKey.currentState?.validate();
     if (!isValid!) {
       return;
     }
     _formKey.currentState?.save();
-    // add logic to sae user request
+    // add logic to login request
   }
 
   @override
@@ -28,7 +27,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            "Create User",
+            "Let's get in",
             style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
@@ -48,24 +47,11 @@ class _UserCreationModuleState extends State<UserCreationModule> {
                     final bool emailValid = RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                         .hasMatch(value!);
-                    if (value!.isEmpty) {
+                    if (value.isEmpty) {
                       return "Email can't be Blank";
                     }
                     if (!emailValid) {
                       return "Enter a valid email";
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      icon: Icon(Icons.person), labelText: "Username"),
-                  onSaved: (newValue) {
-                    initialValues["userName"] = newValue!;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "username can't be Blank";
                     }
                     return null;
                   },
@@ -85,9 +71,13 @@ class _UserCreationModuleState extends State<UserCreationModule> {
                 ),
                 Container(
                   margin: const EdgeInsets.all(20.0),
+                  width: double.maxFinite,
                   child: ElevatedButton(
-                      onPressed: _handleSubmitUser,
-                      child: const Text("Submit")),
+                      onPressed: _handleLogin,
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(fontSize: 25.0),
+                      )),
                 )
               ],
             ),
