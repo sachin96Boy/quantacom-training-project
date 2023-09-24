@@ -12,12 +12,18 @@ class EmployRecordGrid extends StatelessWidget {
     return GridView.builder(
       itemCount: userList.length,
       gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemBuilder: (context, index) {
-        return EmployTile(
-            username: userList[index].userName,
-            userEmail: userList[index].userEmail,
-            userId: userList[index].password);
+        return Container(
+          margin: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.brown.withOpacity(0.2)),
+          child: EmployTile(
+              username: userList[index].userName,
+              userEmail: userList[index].userEmail,
+              userId: userList[index].password),
+        );
       },
     );
   }

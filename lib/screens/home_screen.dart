@@ -42,12 +42,11 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: const Text("Grid of Profile Data"),
+          const SizedBox(
+            child: Text("Grid of Profile Data"),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.75,
+            height: MediaQuery.of(context).size.height * 0.9,
             child: EmployRecordGrid(
               userList: dummyUsers,
             ),
