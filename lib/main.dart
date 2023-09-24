@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_app_quantacom/screens/admin_screen.dart';
 import 'package:web_app_quantacom/screens/home_screen.dart';
 import 'package:web_app_quantacom/screens/profile_details_screen.dart';
+import 'package:web_app_quantacom/screens/signin_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/': (context) => const SignInScreen(),
         AdminScreen.routeName: (context) => const AdminScreen(),
         ProfileDetailsScreen.routeName: (context) =>
             const ProfileDetailsScreen()
