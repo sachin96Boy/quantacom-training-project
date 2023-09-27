@@ -27,7 +27,29 @@ class EmployTile extends StatelessWidget {
           Icons.delete,
         ),
         disabledColor: Colors.grey,
-        onPressed: userType == "USER" ? null : () {},
+        onPressed: userType == "USER"
+            ? null
+            : () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text('Are you sure?'),
+                          content: const Text(
+                              'This item will be no longer available'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                                child: const Text("NO")),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: const Text("YES")),
+                          ],
+                        ));
+              },
       ),
       onTap: () => Navigator.of(context).pushNamed(
           ProfileDetailsScreen.routeName,
