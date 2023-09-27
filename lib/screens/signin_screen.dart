@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_app_quantacom/widgets/signin_module.dart';
 
 class SignInScreen extends StatelessWidget {
+  final SharedPreferences prefs;
   static const routeName = '/signin';
-  const SignInScreen({super.key});
+  const SignInScreen({super.key, required this.prefs});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SignInModule()
+          SignInModule(prefs: prefs)
         ]),
       ),
     );

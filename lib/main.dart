@@ -31,11 +31,12 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
+        debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => prefs.getString('userName') != null
-              ? HomeScreen(prefs: prefs,)
-              : const SignInScreen(),
-          SignInScreen.routeName: (context) => const SignInScreen(),
+              ? HomeScreen(prefs: prefs)
+              : SignInScreen(prefs: prefs),
+          SignInScreen.routeName: (context) => SignInScreen(prefs: prefs),
           AdminScreen.routeName: (context) => const AdminScreen(),
           ProfileDetailsScreen.routeName: (context) =>
               const ProfileDetailsScreen()

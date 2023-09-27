@@ -16,7 +16,7 @@ class UserRepository extends ChangeNotifier {
   Future<void> fetchAndSetUserData() async {
     final respoonse = await dioInstance.get('/api/v1/users');
 
-    final extractedUsers = json.decode(respoonse.data) as List<dynamic>;
+    final extractedUsers = respoonse.data;
 
     final List<UserModel> filledUsers = [];
 

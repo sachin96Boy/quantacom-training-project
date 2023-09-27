@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_app_quantacom/utils/dio_instance.dart';
 
 class SignInModule extends StatefulWidget {
-  const SignInModule({super.key});
+  final SharedPreferences prefs;
+  const SignInModule({super.key, required this.prefs});
 
   @override
   State<SignInModule> createState() => _SignInModuleState();
@@ -23,17 +27,29 @@ class _SignInModuleState extends State<SignInModule> {
     }
     _formKey.currentState?.save();
     // add logic to login request
-    final response = await dioInstance.post(
-      '/api/v1/auth/signin',
-      data: initialValues,
-    );
-    if (response.statusCode == 200) {
-      final extractedData = response.data as Map<String, dynamic>;
-      await prefs.setString('userName', extractedData['userName']);
-      await prefs.setString('userEmail', extractedData['userEmail']);
-      await prefs.setString('userType', extractedData['userType']);
-      await prefs.setString('token', extractedData['token']);
-      Navigator.of(context).pushNamed('/');
+
+    try {
+      final response = await dioInstance.post(
+        '/api/v1/auth/signin',
+        data: json.encode(initialValues),
+      );
+      if (response.statusCode == 200) {
+        final extractedData = response.data as Map<String, dynamic>;
+        await prefs.setString('userName', extractedData['userName']);
+        await prefs.setString('userEmail', extractedData['userEmail']);
+        await prefs.setString('userType', extractedData['userType']);
+        await prefs.setString('token', extractedData['token']);
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response!.data);
+        print(e.response!.headers);
+        print(e.response!.requestOptions);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.requestOptions);
+        print(e.message);
+      }
     }
   }
 
@@ -73,6 +89,7 @@ class _SignInModuleState extends State<SignInModule> {
                   },
                 ),
                 TextFormField(
+                  obscureText: true,
                   decoration: const InputDecoration(
                       icon: Icon(Icons.password), labelText: "password"),
                   onSaved: (newValue) {

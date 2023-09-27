@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_app_quantacom/models/user_model.dart';
+
 import 'package:web_app_quantacom/repository/user_repository.dart';
-import 'package:web_app_quantacom/utils/dio_instance.dart';
+
 import 'package:web_app_quantacom/widgets/employ_record_grid.dart';
+
+enum FilterOptions { profile, logout }
 
 class HomeScreen extends StatefulWidget {
   final SharedPreferences prefs;
@@ -46,6 +48,23 @@ class _HomeScreenState extends State<HomeScreen> {
           "Employ Profile Databse",
           style: TextStyle(color: Colors.grey, fontSize: 20.0),
         ),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) {},
+            icon: const CircleAvatar(child: Icon(Icons.person)),
+            itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: FilterOptions.profile,
+                child: Text("Go to Profile"),
+              ),
+              const PopupMenuItem(
+                value: FilterOptions.logout,
+                child: Text("Logout"),
+              ),
+            ],
+          )
+        ],
+        primary: true,
         elevation: 2.0,
         centerTitle: true,
       ),
