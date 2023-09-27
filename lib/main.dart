@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_app_quantacom/repository/auth_provider.dart';
 import 'package:web_app_quantacom/repository/user_repository.dart';
 import 'package:web_app_quantacom/screens/admin_screen.dart';
 import 'package:web_app_quantacom/screens/home_screen.dart';
@@ -23,24 +24,33 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserRepository([]),
-      child: MaterialApp(
-        title: 'Employ management',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: UserRepository([]),
         ),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/': (context) => prefs.getString('userName') != null
-              ? HomeScreen(prefs: prefs)
-              : SignInScreen(prefs: prefs),
-          SignInScreen.routeName: (context) => SignInScreen(prefs: prefs),
-          AdminScreen.routeName: (context) => const AdminScreen(),
-          ProfileDetailsScreen.routeName: (context) =>
-              const ProfileDetailsScreen()
-        },
+        ChangeNotifierProvider.value(
+          value: Auth(null, null),
+        )
+      ],
+      child: Consumer<Auth>(
+        builder: (context, value, _) => MaterialApp(
+          title: 'Employ management',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/': (context) => value.isAuth 
+                ? HomeScreen(prefs: prefs)
+                : SignInScreen(prefs: prefs),
+            SignInScreen.routeName: (context) => SignInScreen(prefs: prefs),
+            AdminScreen.routeName: (context) => const AdminScreen(),
+            ProfileDetailsScreen.routeName: (context) =>
+                const ProfileDetailsScreen()
+          },
+        ),
       ),
     );
   }

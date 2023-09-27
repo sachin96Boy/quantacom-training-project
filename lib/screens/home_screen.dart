@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_app_quantacom/repository/auth_provider.dart';
 
 import 'package:web_app_quantacom/repository/user_repository.dart';
+import 'package:web_app_quantacom/screens/signin_screen.dart';
 
 import 'package:web_app_quantacom/widgets/employ_record_grid.dart';
 
@@ -55,8 +57,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // when logout clear storage
               // in profile page show user data and edit options
+
+              if (value == FilterOptions.logout) {
+                Navigator.of(context).pop();
+                Provider.of<Auth>(context, listen: false)
+                    .handleLogout(widget.prefs);
+              }
             },
             icon: const CircleAvatar(child: Icon(Icons.person)),
+            position: PopupMenuPosition.under,
             itemBuilder: (_) => [
               const PopupMenuItem(
                 value: FilterOptions.profile,

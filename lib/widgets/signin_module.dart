@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_app_quantacom/utils/dio_instance.dart';
+import 'package:web_app_quantacom/repository/auth_provider.dart';
 
 class SignInModule extends StatefulWidget {
   final SharedPreferences prefs;
@@ -17,10 +15,7 @@ class _SignInModuleState extends State<SignInModule> {
   final _formKey = GlobalKey<FormState>();
   var initialValues = {"username": "", "password": ""};
 
-  void _handleLogin() async {
-    // Obtain shared preferences.
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
+  void _handleLogin() {
     final isValid = _formKey.currentState?.validate();
     if (!isValid!) {
       return;
@@ -28,29 +23,9 @@ class _SignInModuleState extends State<SignInModule> {
     _formKey.currentState?.save();
     // add logic to login request
 
-    try {
-      final response = await dioInstance.post(
-        '/api/v1/auth/signin',
-        data: json.encode(initialValues),
-      );
-      if (response.statusCode == 200) {
-        final extractedData = response.data as Map<String, dynamic>;
-        await prefs.setString('userName', extractedData['userName']);
-        await prefs.setString('userEmail', extractedData['userEmail']);
-        await prefs.setString('userType', extractedData['userType']);
-        await prefs.setString('token', extractedData['token']);
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        print(e.response!.data);
-        print(e.response!.headers);
-        print(e.response!.requestOptions);
-      } else {
-        // Something happened in setting up or sending the request that triggered an Error
-        print(e.requestOptions);
-        print(e.message);
-      }
-    }
+    Provider.of<Auth>(context, listen: false)
+        .handleLogin(initialValues, widget.prefs)
+        .then((value) => {Navigator.of(context).pushNamed('/')});
   }
 
   @override
