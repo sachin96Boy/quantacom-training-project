@@ -28,10 +28,11 @@ class _SignInModuleState extends State<SignInModule> {
       data: initialValues,
     );
     if (response.statusCode == 200) {
-      await prefs.setString('userName', response.data['userName']);
-      await prefs.setString('userEmail', response.data['userEmail']);
-      await prefs.setString('userType', response.data['userType']);
-      await prefs.setString('token', response.data['token']);
+      final extractedData = response.data as Map<String, dynamic>;
+      await prefs.setString('userName', extractedData['userName']);
+      await prefs.setString('userEmail', extractedData['userEmail']);
+      await prefs.setString('userType', extractedData['userType']);
+      await prefs.setString('token', extractedData['token']);
       Navigator.of(context).pushNamed('/');
     }
   }

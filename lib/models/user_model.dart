@@ -12,5 +12,5 @@ class UserModel {
       required this.userName,
       required this.password,
       required this.userId,
-      this.userRole = UserRole.user});
+      required this.userRole});
 }
