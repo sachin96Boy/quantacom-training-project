@@ -28,8 +28,7 @@ class Auth extends ChangeNotifier {
     return _token != null ? true : false;
   }
 
-  Future<void> handleLogin(
-      Map<String, String> initialValues) async {
+  Future<void> handleLogin(Map<String, String> initialValues) async {
     try {
       final response = await dioInstance.post(
         '/api/v1/auth/signin',
@@ -37,9 +36,12 @@ class Auth extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final extractedData = response.data as Map<String, dynamic>;
-        await sharedPreferences.setString('userName', extractedData['userName']);
-        await sharedPreferences.setString('userEmail', extractedData['userEmail']);
-        await sharedPreferences.setString('userType', extractedData['userType']);
+        await sharedPreferences.setString(
+            'userName', extractedData['userName']);
+        await sharedPreferences.setString(
+            'userEmail', extractedData['userEmail']);
+        await sharedPreferences.setString(
+            'userType', extractedData['userType']);
 
         _token = extractedData['token'];
         _id = extractedData['id'];
@@ -58,6 +60,8 @@ class Auth extends ChangeNotifier {
       }
     }
   }
+
+
 
   Future<void> handleLogout() async {
     await sharedPreferences.remove('userName');

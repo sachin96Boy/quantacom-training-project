@@ -8,16 +8,16 @@ class UserCreationModule extends StatefulWidget {
 }
 
 class _UserCreationModuleState extends State<UserCreationModule> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKeyusercreation = GlobalKey<FormState>();
 
   var initialValues = {"userEmail": "", "userName": "", "password": ""};
 
   void _handleSubmitUser() {
-    final isValid = _formKey.currentState?.validate();
+    final isValid = _formKeyusercreation.currentState?.validate();
     if (!isValid!) {
       return;
     }
-    _formKey.currentState?.save();
+    _formKeyusercreation.currentState?.save();
     // add logic to sae user request
   }
 
@@ -35,7 +35,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
             height: 20.0,
           ),
           Form(
-            key: _formKey,
+            key: _formKeyusercreation,
             child: Column(
               children: [
                 TextFormField(

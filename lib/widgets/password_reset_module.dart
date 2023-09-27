@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:web_app_quantacom/repository/auth_provider.dart';
+import 'package:web_app_quantacom/repository/user_repository.dart';
 
 class PasswordResetModule extends StatefulWidget {
   const PasswordResetModule({super.key});
@@ -8,17 +11,35 @@ class PasswordResetModule extends StatefulWidget {
 }
 
 class _PasswordResetModuleState extends State<PasswordResetModule> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKeypasswords = GlobalKey<FormState>();
+  final TextEditingController _pass = TextEditingController();
+  final TextEditingController _confirmPass = TextEditingController();
 
-  var initialValues = {"newPassword": "", "confirmedPassword": ""};
+  var initialValues = {"newpassword": "", "confpassword": ""};
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _pass.dispose();
+    _confirmPass.dispose();
+    super.dispose();
+  }
 
   void _handlePasswordResetSubmit() {
-    final isValid = _formKey.currentState?.validate();
+    final isValid = _formKeypasswords.currentState?.validate();
     if (!isValid!) {
       return;
     }
-    _formKey.currentState?.save();
+    _formKeypasswords.currentState?.save();
     // add logic to password reset request
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    Provider.of<UserRepository>(context, listen: false)
+        .passwordReset(userId, initialValues)
+        .then((_) => {
+              _formKeypasswords.currentState!.reset(),
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Update Complete")))
+            });
   }
 
   @override
@@ -35,14 +56,15 @@ class _PasswordResetModuleState extends State<PasswordResetModule> {
             height: 20.0,
           ),
           Form(
-            key: _formKey,
+            key: _formKeypasswords,
             child: Column(
               children: [
                 TextFormField(
+                  controller: _pass,
                   decoration: const InputDecoration(
                       icon: Icon(Icons.password), labelText: "Enter Password"),
                   onSaved: (newValue) {
-                    initialValues["newPassword"] = newValue!;
+                    initialValues["newpassword"] = newValue!;
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -52,19 +74,21 @@ class _PasswordResetModuleState extends State<PasswordResetModule> {
                   },
                 ),
                 TextFormField(
+                  controller: _confirmPass,
+                  obscureText: true,
                   decoration: const InputDecoration(
                       icon: Icon(Icons.visibility_off),
                       labelText: "ReEnter Password"),
-                  obscureText: true,
+                  // obscureText: true,
                   onSaved: (newValue) {
-                    initialValues["confirmedPassword"] = newValue!;
+                    initialValues["confpassword"] = newValue!;
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "password can't be Blank";
                     }
-                    if (value != initialValues["newPassword"]) {
-                      return "Passwords does not match";
+                    if (value != _pass.text) {
+                      return "passwords don't match";
                     }
                     return null;
                   },

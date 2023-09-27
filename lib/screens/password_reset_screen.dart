@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_app_quantacom/widgets/app_drawer.dart';
 import 'package:web_app_quantacom/widgets/password_reset_module.dart';
 
 class PasswordResetScreen extends StatelessWidget {
@@ -11,6 +12,7 @@ class PasswordResetScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('password Reset'),
         centerTitle: true,
+        
       ),
       body: const SingleChildScrollView(
         child: Column(

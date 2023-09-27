@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:web_app_quantacom/models/user_model.dart';
 import 'package:web_app_quantacom/utils/dio_instance.dart';
@@ -34,5 +36,12 @@ class UserRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  
+  Future<void> passwordReset(String userid, Map<String, String> values) async {
+    final response = await dioInstance.put(
+      '/api/v1/users/$userid',
+      data: json.encode({"newPassword": values["newpassword"]}),
+    );
+
+    notifyListeners();
+  }
 }

@@ -28,7 +28,7 @@ class SignInScreen extends StatelessWidget {
               ),
             ),
           ),
-          SignInModule()
+          const SignInModule()
         ]),
       ),
     );
