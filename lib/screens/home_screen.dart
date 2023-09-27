@@ -50,7 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           PopupMenuButton(
-            onSelected: (value) {},
+            onSelected: (value) {
+              // add logout and gotoprofile options
+
+              // when logout clear storage
+              // in profile page show user data and edit options
+            },
             icon: const CircleAvatar(child: Icon(Icons.person)),
             itemBuilder: (_) => [
               const PopupMenuItem(
