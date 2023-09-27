@@ -37,11 +37,28 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<void> passwordReset(String userid, Map<String, String> values) async {
-    final response = await dioInstance.put(
+    await dioInstance.put(
       '/api/v1/users/$userid',
       data: json.encode({"newPassword": values["newpassword"]}),
     );
 
     notifyListeners();
+  }
+
+  Future<void> UserCreation(Map<String, String> values) async {
+    final response = await dioInstance.post('/api/v1/auth/signup',
+        data: json.encode(values));
+
+    if (response.statusCode == 200) {
+      final result = response.data as Map<String, dynamic>;
+      UserModel newUser = UserModel(
+          userEmail: result["userEmail"],
+          userName: result["userName"],
+          password: result["password"],
+          userId: result["id"],
+          userRole: UserRole.user);
+      _users.add(newUser);
+      notifyListeners();
+    }
   }
 }

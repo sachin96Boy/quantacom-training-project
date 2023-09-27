@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:web_app_quantacom/repository/user_repository.dart';
 
 class UserCreationModule extends StatefulWidget {
   const UserCreationModule({super.key});
@@ -10,7 +12,7 @@ class UserCreationModule extends StatefulWidget {
 class _UserCreationModuleState extends State<UserCreationModule> {
   final _formKeyusercreation = GlobalKey<FormState>();
 
-  var initialValues = {"userEmail": "", "userName": "", "password": ""};
+  var initialValues = {"userEmail": "", "username": "", "password": ""};
 
   void _handleSubmitUser() {
     final isValid = _formKeyusercreation.currentState?.validate();
@@ -19,6 +21,13 @@ class _UserCreationModuleState extends State<UserCreationModule> {
     }
     _formKeyusercreation.currentState?.save();
     // add logic to sae user request
+    Provider.of<UserRepository>(context, listen: false)
+        .UserCreation(initialValues)
+        .then((_) => {
+              _formKeyusercreation.currentState!.reset(),
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Update Complete")))
+            });
   }
 
   @override
@@ -48,7 +57,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
                     final bool emailValid = RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                         .hasMatch(value!);
-                    if (value!.isEmpty) {
+                    if (value.isEmpty) {
                       return "Email can't be Blank";
                     }
                     if (!emailValid) {
@@ -61,7 +70,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
                   decoration: const InputDecoration(
                       icon: Icon(Icons.person), labelText: "Username"),
                   onSaved: (newValue) {
-                    initialValues["userName"] = newValue!;
+                    initialValues["username"] = newValue!;
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -71,6 +80,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
                   },
                 ),
                 TextFormField(
+                  obscureText: true,
                   decoration: const InputDecoration(
                       icon: Icon(Icons.password), labelText: "password"),
                   onSaved: (newValue) {
