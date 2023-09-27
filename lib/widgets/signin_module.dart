@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_app_quantacom/repository/auth_provider.dart';
 
 class SignInModule extends StatefulWidget {
-  final SharedPreferences prefs;
-  const SignInModule({super.key, required this.prefs});
+  const SignInModule({super.key});
 
   @override
   State<SignInModule> createState() => _SignInModuleState();
@@ -24,7 +22,7 @@ class _SignInModuleState extends State<SignInModule> {
     // add logic to login request
 
     Provider.of<Auth>(context, listen: false)
-        .handleLogin(initialValues, widget.prefs);
+        .handleLogin(initialValues);
   }
 
   @override

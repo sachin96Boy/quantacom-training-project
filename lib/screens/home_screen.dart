@@ -4,16 +4,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_app_quantacom/repository/auth_provider.dart';
 
 import 'package:web_app_quantacom/repository/user_repository.dart';
-import 'package:web_app_quantacom/screens/signin_screen.dart';
+
+import 'package:web_app_quantacom/widgets/app_drawer.dart';
 
 import 'package:web_app_quantacom/widgets/employ_record_grid.dart';
 
 enum FilterOptions { profile, logout }
 
 class HomeScreen extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  const HomeScreen({super.key, required this.prefs});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -43,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userlist = Provider.of<UserRepository>(context).users;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -61,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (value == FilterOptions.logout) {
                 Navigator.of(context).pop();
                 Provider.of<Auth>(context, listen: false)
-                    .handleLogout(widget.prefs)
+                    .handleLogout()
                     .then((value) => Navigator.of(context).pushNamed('/'));
               }
             },
@@ -83,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 2.0,
         centerTitle: true,
       ),
+      drawer: const AppDrawerCustom(),
       body: _isloading
           ? const Center(
               child: CircularProgressIndicator(),

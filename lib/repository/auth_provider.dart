@@ -8,8 +8,9 @@ import 'package:web_app_quantacom/utils/dio_instance.dart';
 class Auth extends ChangeNotifier {
   dynamic _id;
   dynamic _token;
+  SharedPreferences sharedPreferences;
 
-  Auth(this._id, this._token);
+  Auth(this._id, this._token, this.sharedPreferences);
 
   String get userId {
     return _id;
@@ -19,12 +20,16 @@ class Auth extends ChangeNotifier {
     return _token;
   }
 
+  SharedPreferences get sharedprefereces {
+    return sharedPreferences;
+  }
+
   bool get isAuth {
     return _token != null ? true : false;
   }
 
   Future<void> handleLogin(
-      Map<String, String> initialValues, SharedPreferences prefs) async {
+      Map<String, String> initialValues) async {
     try {
       final response = await dioInstance.post(
         '/api/v1/auth/signin',
@@ -32,9 +37,9 @@ class Auth extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final extractedData = response.data as Map<String, dynamic>;
-        await prefs.setString('userName', extractedData['userName']);
-        await prefs.setString('userEmail', extractedData['userEmail']);
-        await prefs.setString('userType', extractedData['userType']);
+        await sharedPreferences.setString('userName', extractedData['userName']);
+        await sharedPreferences.setString('userEmail', extractedData['userEmail']);
+        await sharedPreferences.setString('userType', extractedData['userType']);
 
         _token = extractedData['token'];
         _id = extractedData['id'];
@@ -54,10 +59,10 @@ class Auth extends ChangeNotifier {
     }
   }
 
-  Future<void> handleLogout(SharedPreferences prefs) async {
-    await prefs.remove('userName');
-    await prefs.remove('userEmail');
-    await prefs.remove('userType');
+  Future<void> handleLogout() async {
+    await sharedPreferences.remove('userName');
+    await sharedPreferences.remove('userEmail');
+    await sharedPreferences.remove('userType');
 
     _token = null;
     _id = null;

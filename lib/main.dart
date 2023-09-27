@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           value: UserRepository([]),
         ),
         ChangeNotifierProvider.value(
-          value: Auth(null, null),
+          value: Auth(null, null, prefs),
         )
       ],
       child: Consumer<Auth>(
@@ -42,10 +42,9 @@ class MyApp extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           routes: {
-            '/': (context) => value.isAuth 
-                ? HomeScreen(prefs: prefs)
-                : SignInScreen(prefs: prefs),
-            SignInScreen.routeName: (context) => SignInScreen(prefs: prefs),
+            '/': (context) =>
+                value.isAuth ? const HomeScreen() : const SignInScreen(),
+            SignInScreen.routeName: (context) => const SignInScreen(),
             AdminScreen.routeName: (context) => const AdminScreen(),
             ProfileDetailsScreen.routeName: (context) =>
                 const ProfileDetailsScreen()
