@@ -6,6 +6,7 @@ import 'package:web_app_quantacom/repository/auth_provider.dart';
 import 'package:web_app_quantacom/repository/user_repository.dart';
 import 'package:web_app_quantacom/screens/admin_screen.dart';
 import 'package:web_app_quantacom/screens/home_screen.dart';
+import 'package:web_app_quantacom/screens/password_reset_screen.dart';
 import 'package:web_app_quantacom/screens/profile_details_screen.dart';
 import 'package:web_app_quantacom/screens/signin_screen.dart';
 
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
             SignInScreen.routeName: (context) => const SignInScreen(),
             AdminScreen.routeName: (context) => const AdminScreen(),
             ProfileDetailsScreen.routeName: (context) =>
-                const ProfileDetailsScreen()
+                const ProfileDetailsScreen(),
+                PasswordResetScreen.routeName: (context) => const PasswordResetScreen()
           },
         ),
       ),
