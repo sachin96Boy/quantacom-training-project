@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_app_quantacom/widgets/signin_module.dart';
 
 class SignInScreen extends StatelessWidget {
+  static const routeName = '/signin';
   const SignInScreen({super.key});
 
   @override

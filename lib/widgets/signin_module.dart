@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_app_quantacom/utils/dio_instance.dart';
 
 class SignInModule extends StatefulWidget {
   const SignInModule({super.key});
@@ -9,26 +11,44 @@ class SignInModule extends StatefulWidget {
 
 class _SignInModuleState extends State<SignInModule> {
   final _formKey = GlobalKey<FormState>();
-  var initialValues = {"userEmail": "", "password": ""};
+  var initialValues = {"username": "", "password": ""};
 
-  void _handleLogin() {
+  void _handleLogin() async {
+    // Obtain shared preferences.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final isValid = _formKey.currentState?.validate();
     if (!isValid!) {
       return;
     }
     _formKey.currentState?.save();
     // add logic to login request
+    final response = await dioInstance.post(
+      '/api/v1/auth/signin',
+      data: initialValues,
+    );
+    if (response.statusCode == 200) {
+      await prefs.setString('userName', response.data['userName']);
+      await prefs.setString('userEmail', response.data['userEmail']);
+      await prefs.setString('userType', response.data['userType']);
+      await prefs.setString('token', response.data['token']);
+      Navigator.of(context).pushNamed('/');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            "Let's get in",
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Let's get in",
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
           ),
           const SizedBox(
             height: 20.0,
@@ -39,20 +59,15 @@ class _SignInModuleState extends State<SignInModule> {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
-                      icon: Icon(Icons.email), labelText: "Enter Email"),
+                      icon: Icon(Icons.person), labelText: "Enter username"),
                   onSaved: (newValue) {
-                    initialValues["userEmail"] = newValue!;
+                    initialValues["username"] = newValue!;
                   },
                   validator: (value) {
-                    final bool emailValid = RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                        .hasMatch(value!);
-                    if (value.isEmpty) {
-                      return "Email can't be Blank";
+                    if (value!.isEmpty) {
+                      return "username can't be Blank";
                     }
-                    if (!emailValid) {
-                      return "Enter a valid email";
-                    }
+
                     return null;
                   },
                 ),
@@ -73,10 +88,14 @@ class _SignInModuleState extends State<SignInModule> {
                   margin: const EdgeInsets.all(20.0),
                   width: double.maxFinite,
                   child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue),
                       onPressed: _handleLogin,
                       child: const Text(
                         "Log In",
-                        style: TextStyle(fontSize: 25.0),
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
                       )),
                 )
               ],
