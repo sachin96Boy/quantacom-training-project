@@ -61,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
               if (value == FilterOptions.logout) {
                 Navigator.of(context).pop();
                 Provider.of<Auth>(context, listen: false)
-                    .handleLogout(widget.prefs);
+                    .handleLogout(widget.prefs)
+                    .then((value) => Navigator.of(context).pushNamed('/'));
               }
             },
             icon: const CircleAvatar(child: Icon(Icons.person)),

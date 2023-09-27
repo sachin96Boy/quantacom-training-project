@@ -24,8 +24,7 @@ class _SignInModuleState extends State<SignInModule> {
     // add logic to login request
 
     Provider.of<Auth>(context, listen: false)
-        .handleLogin(initialValues, widget.prefs)
-        .then((value) => {Navigator.of(context).pushNamed('/')});
+        .handleLogin(initialValues, widget.prefs);
   }
 
   @override
