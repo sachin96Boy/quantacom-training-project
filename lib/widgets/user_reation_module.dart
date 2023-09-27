@@ -22,7 +22,7 @@ class _UserCreationModuleState extends State<UserCreationModule> {
     _formKeyusercreation.currentState?.save();
     // add logic to sae user request
     Provider.of<UserRepository>(context, listen: false)
-        .UserCreation(initialValues)
+        .userCreation(initialValues)
         .then((_) => {
               _formKeyusercreation.currentState!.reset(),
               ScaffoldMessenger.of(context).showSnackBar(

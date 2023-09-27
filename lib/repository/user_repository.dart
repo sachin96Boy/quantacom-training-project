@@ -13,6 +13,10 @@ class UserRepository extends ChangeNotifier {
     return [..._users];
   }
 
+  UserModel findById(String id) {
+    return users.firstWhere((element) => element.userId == id);
+  }
+
   Future<void> fetchAndSetUserData() async {
     final respoonse = await dioInstance.get('/api/v1/users');
 
@@ -45,7 +49,7 @@ class UserRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> UserCreation(Map<String, String> values) async {
+  Future<void> userCreation(Map<String, String> values) async {
     final response = await dioInstance.post('/api/v1/auth/signup',
         data: json.encode(values));
 
